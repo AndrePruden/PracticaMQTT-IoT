@@ -1,36 +1,28 @@
-#ifndef WIFICONNECTION_H
-#define WIFICONNECTION_H
+#ifndef WIFI_CONNECTION_H
+#define WIFI_CONNECTION_H
 
 #include <WiFi.h>
 
 class WiFiConnection {
 public:
-    WiFiConnection(const char* ssid, const char* password) 
-        : ssid(ssid), password(password), previousMillisReconnect(0) {}
+    WiFiConnection(const char* ssid, const char* password)
+        : ssid(ssid), password(password) {}
 
     void connect() {
-        Serial.print("Conectando a WiFi ");
+        Serial.print("Connecting to WiFi ");
         Serial.println(ssid);
+        
         WiFi.begin(ssid, password);
         while (WiFi.status() != WL_CONNECTED) {
-            unsigned long currentMillis = millis();
-            if (currentMillis - previousMillisReconnect >= reconnectInterval) {
-                previousMillisReconnect = currentMillis;
-                Serial.print(".");
-            }
+            delay(500);
+            Serial.print(".");
         }
-        Serial.println("\nConectado a WiFi");
-    }
-
-    bool isConnected() {
-        return WiFi.status() == WL_CONNECTED;
+        Serial.println("\nConnected to WiFi");
     }
 
 private:
     const char* ssid;
     const char* password;
-    unsigned long previousMillisReconnect;
-    const long reconnectInterval = 500;
 };
 
-#endif // WIFICONNECTION_H
+#endif // WIFI_CONNECTION_H
